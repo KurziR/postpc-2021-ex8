@@ -11,16 +11,25 @@ import androidx.work.WorkManager;
 
 public class MyRootsApp extends Application {
 
+    private static MyRootsApp instance = null;
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
 
         WorkManager workManager = WorkManager.getInstance(this);
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(CalculateRootsWorker.class)
                 .build();
 
-        workManager.enqueueUniqueWork(request);
-
-        int work_id = request.id;
+//        workManager.enqueueUniqueWork(request);
+//
+//        int work_id = request.id;
     }
+
+    public static MyRootsApp getInstance() {
+        return instance;
+    }
+
 }
+

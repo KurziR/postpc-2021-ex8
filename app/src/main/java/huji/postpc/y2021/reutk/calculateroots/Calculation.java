@@ -1,8 +1,57 @@
 package huji.postpc.y2021.reutk.calculateroots;
 
-import java.util.List;
 
-public class Calculation implements Comparable<Calculation> {
+import com.google.gson.Gson;
+
+import java.io.Serializable;
+
+
+public class Calculation implements Comparable<Calculation>, Serializable {
+
+
+    enum Status {
+        IN_PROGRESS,
+        DONE
+    }
+
+    private String requestId;
+    int progress = 0;
+    long numToCalc;
+
+    Status status;
+
+    long[] roots;
+
+    public Calculation(long number) {
+//        this.requestId = requestId;
+        this.numToCalc = number;
+        this.status = Status.IN_PROGRESS;
+        this.roots = new long[2];
+    }
+
+    public String getRequestId() {
+        return this.requestId;
+    }
+
+    public long getNemToCalc() {
+        return this.numToCalc;
+    }
+
+    public long[] getRoots() {
+        return this.roots;
+    }
+
+    public int getProgress() {
+        return this.progress;
+    }
+
+    public Status  getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     @Override
     public int compareTo(Calculation o) {
@@ -14,25 +63,16 @@ public class Calculation implements Comparable<Calculation> {
         return (int) (numToCalc - o.numToCalc);
     }
 
-    enum Status {
-        IN_PROGRESS,
-        DONE
+    public String calcToString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 
-    int progress = 0;
-    long numToCalc;
-
-    Status status = Status.IN_PROGRESS;
-
-    int[] roots = new int[2];
-
-    public Calculation(long number) {
-        numToCalc = number;
+    public static Calculation stringToCalc(String string) {
+        Gson gson = new Gson();
+        return gson.fromJson(string, Calculation.class);
     }
 
-    public Status  getStatus() {
-        return this.status;
-    }
 
 
 }

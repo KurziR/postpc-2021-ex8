@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import static java.lang.Math.sqrt;
+
 public class CalculateRootsWorker extends Worker {
 
     public CalculateRootsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -14,17 +16,17 @@ public class CalculateRootsWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        for(int i = 2; i < numberToCalculateRootsFor; i++) {
-            if (numberToCalculateRootsForc % i == 0) {
-                long root1 = i;
-                long root2 = (numberToCalculateRootsFor / i);
-                rootIntent.setAction("found_roots");
-                rootIntent.putExtra("original_number", numberToCalculateRootsFor);
-                rootIntent.putExtra("root1", root1);
-                rootIntent.putExtra("root2", root2);
-                sendBroadcast(rootIntent);
-                return Result.success(i);
+        long numToCalc = getInputData().getLong("numToCalc",-1);
+        long[] roots = getInputData().getLongArray("roots");
+        long sqrtNum = (long) sqrt(numToCalc);
+        for(int i = 2; i < sqrtNum; i++) {
+            if(numToCalc % i == 0) {
+                roots[0] = i;
+                roots[1] = (numToCalc / i);
+                return Result.success();
             }
         }
+        roots[0] = numToCalc;
+        return Result.success();
     }
 }
