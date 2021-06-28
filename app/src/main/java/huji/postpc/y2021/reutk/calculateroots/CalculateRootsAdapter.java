@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.WorkManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,9 +16,6 @@ public class CalculateRootsAdapter extends RecyclerView.Adapter<CalculateRootsHo
 
     private final List<Calculation> calcs = new ArrayList<Calculation>();
 
-//    public CalculateRootsAdapter() {
-//        this.calcs;
-//    }
 
     @NonNull
     @Override
@@ -35,6 +33,7 @@ public class CalculateRootsAdapter extends RecyclerView.Adapter<CalculateRootsHo
 
         if(calculation.getStatus() == Calculation.Status.IN_PROGRESS) {
             holder.progress.setVisibility(View.VISIBLE);
+            holder.progress.setProgress(calculation.getProgress());
             holder.cancel.setVisibility(View.VISIBLE);
             holder.delete.setVisibility(View.INVISIBLE);
             holder.explanation.setText("Calculating roots for: " + calculation.getNemToCalc() + "...");
@@ -46,9 +45,24 @@ public class CalculateRootsAdapter extends RecyclerView.Adapter<CalculateRootsHo
             if(calculation.roots.length == 1) {
                 holder.explanation.setText(calculation.getNemToCalc() + " is a prime number!");
             } else {
-                holder.explanation.setText("Roots for " + calculation.getNemToCalc() + ": " + calculation.getRoots()[0] + "X " + calculation.getRoots()[1]);
+                holder.explanation.setText("Roots for " + calculation.getNemToCalc() + ": " + calculation.getRoots()[0] + " * " + calculation.getRoots()[1]);
             }
         }
+
+        holder.delete.setOnClickListener(v -> {
+            calcs.remove(calculation);
+            Collections.sort(calcs);
+            notifyDataSetChanged();
+        });
+
+        holder.cancel.setOnClickListener(v -> {
+            calcs.remove(calculation);
+            Collections.sort(calcs);
+            notifyDataSetChanged();
+            String tag = "calc-"+ String.valueOf(calculation.getNemToCalc());
+            WorkManager workManager = WorkManager.getInstance(v.getContext());
+            workManager.cancelAllWorkByTag(tag);
+        });
     }
 
     @Override
@@ -59,5 +73,9 @@ public class CalculateRootsAdapter extends RecyclerView.Adapter<CalculateRootsHo
     public void addCalc(Calculation calc) {
         calcs.add(calc);
         Collections.sort(calcs);
+    }
+
+    public List<Calculation> getCalculations() {
+        return this.calcs;
     }
 }

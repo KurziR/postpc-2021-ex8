@@ -1,20 +1,16 @@
 package huji.postpc.y2021.reutk.calculateroots;
 
 
-import com.google.gson.Gson;
-
 import java.io.Serializable;
 
 
 public class Calculation implements Comparable<Calculation>, Serializable {
-
 
     enum Status {
         IN_PROGRESS,
         DONE
     }
 
-    private String requestId;
     int progress = 0;
     long numToCalc;
 
@@ -23,14 +19,9 @@ public class Calculation implements Comparable<Calculation>, Serializable {
     long[] roots;
 
     public Calculation(long number) {
-//        this.requestId = requestId;
         this.numToCalc = number;
         this.status = Status.IN_PROGRESS;
         this.roots = new long[2];
-    }
-
-    public String getRequestId() {
-        return this.requestId;
     }
 
     public long getNemToCalc() {
@@ -41,9 +32,18 @@ public class Calculation implements Comparable<Calculation>, Serializable {
         return this.roots;
     }
 
+    public void setRoots(long[] roots) {
+        this.roots = roots;
+    }
+
     public int getProgress() {
         return this.progress;
     }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
 
     public Status  getStatus() {
         return this.status;
@@ -62,17 +62,4 @@ public class Calculation implements Comparable<Calculation>, Serializable {
         }
         return (int) (numToCalc - o.numToCalc);
     }
-
-    public String calcToString() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
-
-    public static Calculation stringToCalc(String string) {
-        Gson gson = new Gson();
-        return gson.fromJson(string, Calculation.class);
-    }
-
-
-
 }
