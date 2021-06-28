@@ -18,7 +18,7 @@ public class CalculateRootsHolder extends RecyclerView.ViewHolder {
     Button cancel;
 
 
-    public CalculateRootsHolder(@NonNull View itemView, Context context) {
+    public CalculateRootsHolder(@NonNull View itemView) {
         super(itemView);
         gray_box = itemView.findViewById(R.id.gray_box);
         explanation = itemView.findViewById(R.id.calc_explanation);

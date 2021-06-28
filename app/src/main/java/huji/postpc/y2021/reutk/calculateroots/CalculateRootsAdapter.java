@@ -21,7 +21,7 @@ public class CalculateRootsAdapter extends RecyclerView.Adapter<CalculateRootsHo
     @Override
     public CalculateRootsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.calc_row, parent, false);
-        return new CalculateRootsHolder(view, view.getContext());
+        return new CalculateRootsHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
